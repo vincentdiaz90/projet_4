@@ -48,24 +48,37 @@ modalRemoves.forEach(remove => remove.addEventListener('click', () => {
   modalbg.classList.remove("active");
 }));
 
+
+
+
 // valide label/imputs
 
+  // Ecoute de l'évenement au relevé d'une touche du clavier pour le prénom
+
 first.addEventListener('keyup', validateFirst);
+  
+  // Création d'une condition (3 cas possibles)
 
-
-    
 function validateFirst() {
+
+    // Aucune lettre n'est renseignée
     if(first.value.length == 0){
         firstNameError.innerText = "le nom est requie";
+        //suppression de la class activeGreen et insertion de la classe activeRed
         first.classList.remove('activeGreen');
         first.classList.add('activeRed');
-        
         return false;
+
+    // Utilisation d'une expression régulière où on regarde si notre saisie est différente de notre partern
+    // On accepte toutes les lettres minuscules majuscules au nombre minimum de deux
     } else if(!first.value.match(/^[A-Za-z]{2,}$/)) {
         firstNameError.innerText = "Renseignez au moins deux lettres";
+        //suppression de la class activeRed et insertion de la classe activeGreen
         first.classList.remove('activeGreen');
         first.classList.add('activeRed');
         return false;
+
+    // Tout est ok
     } else {
         firstNameError.innerText = "";
         first.classList.remove('activeRed');
@@ -81,10 +94,9 @@ function validateLast() {
       NameError.innerText = "le prénom est requie";
       last.classList.remove('activeGreen');
       last.classList.add('activeRed');
-      
       return false;
-  } else if(!last.value.match(/^[A-Za-z]{2,}$/)) {
-      NameError.innerText = "Renseignez au moins deux lettres";
+  } else if(!last.value.match(/^[A-Z]{1,1}[A-Za-z]{1,}$/)) {
+      NameError.innerText = "Renseignez au moins deux lettres dont la première en majuscule";
       last.classList.remove('activeGreen');
       last.classList.add('activeRed');
       return false;
@@ -97,20 +109,27 @@ function validateLast() {
 };
 
 email.addEventListener('keyup', validateEmail);
+
+  // Verifie une condition (3 cas possibles)
     
 function validateEmail(){
+
+    // Aucune information n'est saisie dans l'espace
     if(email.value.length == 0){
         emailError.innerText = "Renseignez votre email";
         email.classList.remove('activeGreen');
         email.classList.add('activeRed');
         return false;
 
+    //Correspondance avec le regex
+    //On acccepte les lettres chiffres pouvant être séparer par les ponctuation - _ . suivit obligatoirement par un @ suivit par des lettre ouis un . puis entre 2 et 4 lettres
     } else if(!email.value.match(/^[A-Za-z\._\-[0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)) {
         emailError.innerText = "Renseignez un email valide";
         email.classList.remove('activeGreen');
         email.classList.add('activeRed');
         return false;
 
+    // Tout est ok
     } else {
         emailError.innerText = "";
         email.classList.remove('activeRed');
@@ -142,10 +161,15 @@ function validateQuantity(){
     }
 };
 
+
+
+
 birthdate.addEventListener('change', validateBirthdate);
 
 function validateBirthdate(){
 
+  // On va comparer la date actuelle à la date de naissance de l'utilisateur que l'on va respectivement exprimer le resete sur 01/01/1970 : getTime /timeStamp et si la diff > 18 ans alors il est majeur
+  
   // Date actuelle :
   let CurrentDate = new Date();
   let CurrentDateTime = CurrentDate.getTime();
@@ -164,6 +188,7 @@ function validateBirthdate(){
 
   let totalTimeStamp = birthdateAnneeTimeStamp + birthdateMoisTimeStamp + birthdateJourTimeStamp;
   
+  // date exprimé par l'utilisateur base 01/01/1970
   let diff = (CurrentDateTime - totalTimeStamp);
   
 
@@ -184,7 +209,7 @@ function validateBirthdate(){
     birthdateError.innerText = ('Vous devez être majeur pour participer à ce tournoi');
     birthdate.classList.remove('activeGreen');
     birthdate.classList.add('activeRed');
-      return false;
+    return false;
 
   } else {
     birthdateError.innerText = "";
@@ -195,10 +220,9 @@ function validateBirthdate(){
 }
 
 
+
 let count = 0;
 let validateCheckbox = false;
-
-
 
 for( let i=0; i<checkboxes.length; i++){
   checkboxes[i].addEventListener('click', function() {
@@ -212,50 +236,18 @@ for( let i=0; i<checkboxes.length; i++){
 
     // On définie un boléen pour valider si au moins une checkbox est validée.
     if(count != 0){
-      validateCheckbox = true;
       checkboxInputsError.innertext = "";
+      validateCheckbox = true;
       
     } else {
-      validateCheckbox = false;
       checkboxInputsError.innertext = "Veuillez sélectionner au moins un choix";
+      validateCheckbox = false;
     }
-    //return validateCheckbox;
     
   });
   
 }
 
-
-/*
-let count = 0;
-
-for( let i=0; i<checkboxes.length; i++){
-
-  checkboxes[i].addEventListener('click', validateCheckboxes);
-
-} 
-
-function validateCheckboxes(){
-
-  // S'assurer que la checkbox est cochée ou non
-  if(this.checked){
-    count++;
-  } else {
-    count--;
-  }
-
-  // On définie un boléen pour valider si au moins une checkbox est validée.
-  if(count != 0){
-    return true;
-    checkboxInputsError.innertext = "";
-    
-  } else {
-    return false;
-    checkboxInputsError.innertext = "Veuillez sélectionner au moins un choix";
-  }
-  
-};
-*/
 
 
 checkbox1.addEventListener('click', validateCheckbox1);
@@ -271,8 +263,6 @@ function validateCheckbox1(){
 };
 
 
-
-
 // validate submit
 
 
@@ -285,14 +275,13 @@ formInscription.addEventListener('submit', function(e){
     validateQuantity() == false||
     validateBirthdate() == false ||
     validateCheckbox == false ||
-    // validateCheckboxes() == false ||
     validateCheckbox1() == false)
     {
       e.preventDefault();
-      validationSubmitError.innerText = "veuillez renseigner tous les champs";
+      validationSubmitError.innerText = "Veuillez renseigner tous les champs";
       return false;
     }  else {
+      validationSubmitError.innerText = "";
       alert("votre message à bien été envoyé");
-      
     }
 });
