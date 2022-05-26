@@ -10,7 +10,7 @@ function editNav() {
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
-const modalRemoves = document.querySelectorAll(".modal-remove");
+const modalRemoves = document.querySelector(".modal-remove");
 const modalAdd = document.querySelector(".modal-add");
 
 
@@ -43,10 +43,10 @@ modalAdd.addEventListener("click", () => {
 });
 
     // fermeture
-
-modalRemoves.forEach(remove => remove.addEventListener('click', () => {
+modalRemoves.addEventListener("click", () => {
   modalbg.classList.remove("active");
-}));
+});
+
 
 
 
